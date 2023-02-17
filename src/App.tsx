@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import './App.scss'
+import { FormContainer } from './components/Form/FormContainer'
+import { MyGlobalContext } from './context/isStatusActiveContext'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [isActiveStatus, setIsActiveStatus] = useState<boolean>(false)
+    return (
+      <MyGlobalContext.Provider value={{
+        isActiveStatus,
+        setIsActiveStatus
+      }}>
+      <div className="app">
+        <FormContainer />
+      </div>
+      </MyGlobalContext.Provider>
+
+  )
 }
 
-export default App;
+export default App
