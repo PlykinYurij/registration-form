@@ -1,28 +1,43 @@
-import { useGlobalContext } from "../../context/isStatusActiveContext"
-import { IHeader } from "../../types/types"
+import { useRef } from "react"
+import useOnClickOutside from "../../hooks/useOnClickOutside"
 
-export const Header = ({ title, name, description }: IHeader) => {
-    const { isActiveStatus, setIsActiveStatus } = useGlobalContext()
+interface IDataPerson {
+    namePerson: string
+    idPerson: number
+}
 
-    const handleClickWindow = () => {
+interface IHeaderProps {
+    title: string
+    description: string
+    dataPerson: IDataPerson
+    isActiveStatus: boolean
+    setIsActiveStatus: (c: boolean) => void
+}
+
+export const Header = ({ title, dataPerson, description, isActiveStatus, setIsActiveStatus }: IHeaderProps) => {
+
+    const tooltipRef = useRef(null)
+
+    const handleClickOutside = () => {
         setIsActiveStatus(false)
     }
-    const handleIsActiveStatus = (event: React.MouseEvent) => {
-        event.stopPropagation()
+
+    const handleClickInside = () => {
         setIsActiveStatus(!isActiveStatus)
     }
 
-    window.addEventListener("click", handleClickWindow)
+    // с применением хука больше не могу вводить данные в форме
 
+    useOnClickOutside(tooltipRef, handleClickOutside)
 
     return <div className="form-container form-container__header">
         <div className="form-container__title">
             <div className="header-form__title">{title}</div>
         </div>
         <div className="form-container__input">
-            <div className="header-form__name">{name}</div>
+            <div className="header-form__name">{dataPerson.namePerson} № {dataPerson.idPerson}</div>
         </div>
-        <div className="form-container__description" onClick={(event) => handleIsActiveStatus(event)}>
+        <div className="form-container__description" onClick={() => handleClickInside()} ref={tooltipRef}>
             <div className="header-form__description">{description}</div>
         </div>
     </div>

@@ -1,5 +1,9 @@
 $maxWidth: 1449;
 
+$colorRed: #FF0000;
+
+$colorBlack: #000000;
+
 @mixin adaptiv-font($pcSize, $mobSize) {
     $addSize: $pcSize - $mobSize;
     $addMobSize: $addSize +$addSize * 0.7;
@@ -14,8 +18,6 @@ $maxWidth: 1449;
 }
 
 %headerText {
-    font-family: 'Arial';
-    font-style: normal;
     font-weight: 700;
     @include adaptiv-font(30, 9);
 }
@@ -43,7 +45,7 @@ form {
     .form-container__title {
         width: 25%;
         @include adaptiv-font(21, 12);
-        color: #000000;
+        color: $colorBlack;
 
         .header-form__title {
             @extend %headerText;
@@ -58,11 +60,11 @@ form {
         .inputForm {
             width: 100%;
             height: 30px;
-
+            cursor: pointer;
         }
 
         .error {
-            border: 1px solid red;
+            border: 1px solid $colorRed;
         }
 
         select {
@@ -71,16 +73,16 @@ form {
 
         .form-container__input__error {
             @include adaptiv-font(12, 9);
-            color: #FF0000;
+            color: $colorRed;
         }
 
         .header-form__name {
             @extend %headerText;
-            color: #000000;
+            color: $colorBlack;
         }
 
         .input-status-form {
-            width: 130%;
+            @extend .inputForm;
             display: none;
         }
 
@@ -88,19 +90,13 @@ form {
             display: inline-block;
         }
 
-        .description-checkbox-form {
-            margin-left: 10px;
-            font-size: 16px;
-        }
-
         .block-status {
-            padding: 10px 0;
+            padding: 13px 0 13px 10px;
             display: flex;
             align-items: center;
             width: 130%;
             background-color: #EAEAEA;
             position: relative;
-            padding-left: 10px;
             color: #404040;
             @include adaptiv-font(14, 9)
         }
@@ -110,12 +106,12 @@ form {
         }
 
         .block-status-square {
-            width: 15px;
-            height: 15px;
+            width: 10px;
+            height: 10px;
             background-color: #EAEAEA;
             position: absolute;
-            top: -7.5px;
-            left: 20px;
+            top: -5px;
+            left: 10px;
             transform: rotate(45deg);
         }
     }
@@ -125,11 +121,19 @@ form {
         display: flex;
         align-items: center;
 
+        .checkbox-form {
+            cursor: pointer;
+        }
+
         .container-description-checkbox-form {
-            div {
+            .container-description-checkbox-form__container-label {
                 margin-left: 10px;
                 @include adaptiv-font(16, 9);
                 width: 250%;
+
+                .label-checkbox-form {
+                    cursor: pointer;
+                }
             }
         }
 
@@ -140,7 +144,8 @@ form {
             padding: 10px 20px;
             color: #FFFFFF;
             text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
-            @include adaptiv-font(18, 10)
+            @include adaptiv-font(18, 10);
+            cursor: pointer;
         }
     }
 
@@ -149,6 +154,10 @@ form {
         width: 45%;
         @include adaptiv-font(12, 8);
         color: #999999;
+
+        .desctiption-text {
+            width: 85%;
+        }
 
         .header-form__description {
             @include adaptiv-font(12, 8);
@@ -160,13 +169,23 @@ form {
     }
 }
 
+.container-description-button-form {
+    margin-left: 12px;
+    @include adaptiv-font(12, 8);
+    color: #999999;
+
+    .description-button__last-change {
+        width: 250%;
+    }
+}
+
 .line-hight-block {
     border: 1px solid #E5E4E4;
 }
 
 .form-container__header {
-    margin-bottom: 10px;
-    margin-top: 30px;
+    align-items: end;
+    margin-bottom: 15px;
 }
 
 .form-container__status-form {
