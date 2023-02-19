@@ -1,5 +1,5 @@
 import './App.scss'
-import { FormContainer } from './components/Form/FormContainer'
+import { FormContainer } from './components/RegistrationForm/RegistrationFormContainer'
 
 function App() {
     return (

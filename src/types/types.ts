@@ -1,4 +1,4 @@
-export interface IRegistrationFields {
+export interface IRegistrationFormFields {
     status: string
     city: string
     password: string
@@ -8,12 +8,12 @@ export interface IRegistrationFields {
 }
 
 
-export interface ICities {
+export interface ICity {
     city: string
     population: number
 }
 
-export interface ICitiesDto {
+export interface ICityDto {
     city: string
     population: string
 }

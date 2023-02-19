@@ -1,11 +1,11 @@
-import { ICities } from "../../types/types"
+import { ICity } from "../../types/types"
 
 interface ISelectProps {
     title: string
     description?: string
     register: any
     name: string
-    options: ICities[]
+    options: ICity[]
 }
 
 export const SelectedForm = ({

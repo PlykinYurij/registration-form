@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
-import { IRegistrationFields } from "../../types/types"
-import { emailValidation, passwordValidation } from "../../validation"
+import { IRegistrationFormFields } from "../../types/types"
+import { emailValidation, passwordValidation, cheсkPasswordValidation } from "../../utils/validations/validation"
 import { ButtonForm } from "../ButtonForm/ButtonForm"
 import { CheckboxForm } from "../CheckboxForm/CheckboxForm"
 import { Header } from "../Header/Header"
@@ -10,14 +10,10 @@ import { SelectedForm } from "../SelectedForm/SelectedForm"
 import { StatusForm } from "../StatusForm/StatusForm"
 import { useCities } from "../../hooks/useCities"
 
-
 export const FormContainer: React.FC = () => {
     const [isActiveStatus, setIsActiveStatus] = useState<boolean>(false)
-    const [isLastChange, setIsLastChange] = useState<boolean>(false)
-    const [timeNow, setTimeNow] = useState<String>("")
-    const [dateNow, setDateNow] = useState<String>("")
 
-    const { register, handleSubmit, formState: { errors, isValid }, reset, watch } = useForm<IRegistrationFields>({
+    const { register, handleSubmit, formState: { errors, isValid }, reset, watch } = useForm<IRegistrationFormFields>({
         mode: "onSubmit"
     })
 
@@ -25,47 +21,43 @@ export const FormContainer: React.FC = () => {
     const statusText = watch("status")
     const passwordWatch = watch("password")
     const dataPerson = { namePerson: "Человек", idPerson: 3596941 }
-    const resultNowDate = `последние изменения ${dateNow} в ${timeNow}`
+    const cheсkPasswordСorrectness = cheсkPasswordValidation(passwordWatch)
+    const [date, setDate] = useState<Date>()
+    const [formatDate, setFormatDate] = useState<string>()
 
-    const onSubmit: SubmitHandler<IRegistrationFields> = (data) => {
-        delete data.checkPassword;
-        console.log( JSON.stringify(data))
+    useEffect(() => {                                      
+        const dayWithMonth = date?.toLocaleString('ru', {
+            month: 'long',
+            day: 'numeric',
+        })
+        const fullYear = date?.getFullYear()
+        const timeNow = date?.toLocaleTimeString("ru")
+        setFormatDate(`последние изменения ${dayWithMonth} ${fullYear} в ${timeNow}`)
+    }, [date])
+
+    function onClickSubmitButton() { 
+        if (isValid) {
+            setDate(new Date())
+        }
+    }
+
+    const onSubmit: SubmitHandler<IRegistrationFormFields> = (data) => {
+        const output = {
+            status: data.status,
+            city: data.city || cities[0].city,
+            email: data.email,
+            password: data.password,
+            subscription: data.subscription
+        }
+        console.log(JSON.stringify(output))
         reset()
     }
 
-    // не придумал как вынести эту валидацию из за переменной которая используется
-
-    const cheсkPasswordValidation = {
-        validate: (value: string) => {
-            if (value !== passwordWatch) {
-                return "Пароли не совпадают"
-            }
-            return true
-        }
-    }
-
-    // хотел вынести в отдельную компоненту не получилось из за того что функия вызывается в Button 
-
-    function onClickSubmitButton() {
-        if (isValid) {
-            const date = new Date()
-            const dayWhithMonth = date.toLocaleString('ru', {
-                month: 'long',
-                day: 'numeric',
-            })
-
-            const fullYear = date.getFullYear()
-            const time = date.toLocaleTimeString("ru")
-
-            setTimeNow(time)
-            setDateNow(`${dayWhithMonth} ${fullYear}`)
-
-            setIsLastChange(true)
-        }
-    }
-
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={(event) => {
+            event.preventDefault()
+            handleSubmit(onSubmit)()
+        }}>
 
             <Header
                 title="Здравствуйте,"
@@ -81,6 +73,7 @@ export const FormContainer: React.FC = () => {
                 name="status"
                 statusText={statusText}
                 isActiveStatus={isActiveStatus}
+                setIsActiveStatus={setIsActiveStatus}
             />
 
             <SelectedForm
@@ -109,7 +102,7 @@ export const FormContainer: React.FC = () => {
                 type="password"
                 name="checkPassword"
                 errors={errors}
-                validation={cheсkPasswordValidation}
+                validation={cheсkPasswordСorrectness}
                 title="Пароль еще раз"
                 description="Повторите пароль, пожалуйста, это обезопасит вас с нами на случай ошибки."
             />
@@ -136,9 +129,9 @@ export const FormContainer: React.FC = () => {
             />
 
             <ButtonForm
-                isLastChange={isLastChange}
+                isLastChange={date}
                 onClickSubmitButton={onClickSubmitButton}
-                resoultLastChange={resultNowDate}
+                resoultLastChange={formatDate}
                 description="Изменить"
             />
 

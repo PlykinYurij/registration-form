@@ -1,8 +1,8 @@
 interface IButtonProps {
     description: string
     onClickSubmitButton: () => void
-    isLastChange: boolean
-    resoultLastChange: string
+    isLastChange: Date | undefined
+    resoultLastChange: string | undefined
 }
 
 export const ButtonForm = ({

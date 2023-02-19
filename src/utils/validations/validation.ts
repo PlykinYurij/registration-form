@@ -21,3 +21,14 @@ export const emailValidation = {
         message: "Неверный E-mail"
     }
 }
+
+export const cheсkPasswordValidation = (passwordWatch: string) => {
+    return {
+        validate: (value: string) => {
+            if (value !== passwordWatch) {
+                return "Пароли не совпадают"
+            }
+            return true
+        }
+    }
+}

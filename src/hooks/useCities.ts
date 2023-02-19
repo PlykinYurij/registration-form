@@ -1,12 +1,12 @@
 import { fetchCities } from './../api/api';
-import { ICitiesDto, ICities } from './../types/types';
+import { ICityDto, ICity } from './../types/types';
 import { useState, useEffect } from 'react';
 
 export const useCities = () => {
-    const [cities, setCities] = useState<ICities[]>([])
+    const [cities, setCities] = useState<ICity[]>([])
 
     useEffect(() => {
-        fetchCities().then((cities: ICitiesDto[]) => {
+        fetchCities().then((cities: ICityDto[]) => {
             const convertedCities = convertCities(cities)
             const filteredAndSortedCities = getFilteredAndSortedCities(convertedCities)
 
@@ -17,7 +17,7 @@ export const useCities = () => {
     return { cities }
 }
 
-function convertCities(cities: ICitiesDto[]): ICities[] {
+function convertCities(cities: ICityDto[]): ICity[] {
     return cities.map(city => {
         return {
             ...city,
@@ -26,7 +26,7 @@ function convertCities(cities: ICitiesDto[]): ICities[] {
     })
 }
 
-function getFilteredAndSortedCities(cities: ICities[]): ICities[] {
+function getFilteredAndSortedCities(cities: ICity[]): ICity[] {
     const result = []
     const cityWhithMaxPopulation = cities.reduce((acc, curr) => {
         return acc.population > curr.population ? acc : curr

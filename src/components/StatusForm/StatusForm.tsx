@@ -1,3 +1,6 @@
+import { useRef, useState } from "react"
+import useOnClickOutside from "../../hooks/useOnClickOutside"
+
 interface IStatusProps {
     register: any
     type: string
@@ -6,6 +9,7 @@ interface IStatusProps {
     name: string
     statusText: string
     isActiveStatus: boolean
+    setIsActiveStatus: (c: boolean) => void
 }
 
 export const StatusForm = ({
@@ -15,7 +19,8 @@ export const StatusForm = ({
     description,
     name,
     statusText,
-    isActiveStatus
+    isActiveStatus,
+    setIsActiveStatus
 }: IStatusProps) => {
 
     const inputStatusClasses: Array<string> = ["input-status-form"]
@@ -26,10 +31,13 @@ export const StatusForm = ({
         blockStatusClasses.push("is-active-block")
     }
 
-    //stopPropogation не работает
-    const handleClickInput = (event: React.MouseEvent) => {
-        event.stopPropagation()
+    const tooltipRef = useRef(null)
+
+    const handleClickOutside = () => {
+        setIsActiveStatus(false)
     }
+
+    useOnClickOutside(tooltipRef, handleClickOutside)
 
     return (
         <div className="form-container form-container__status-form">
@@ -41,17 +49,20 @@ export const StatusForm = ({
             <div className="form-container__input">
                 <div className="container-content-status-form">
                     <div className={blockStatusClasses.join(" ")}>
-                        <div className="block-status-text">{(!!statusText) ? statusText : "Прежде чем действовать, надо понять"}</div>
+                        <div className="block-status-text">{(!!statusText)
+                            ? statusText
+                            : "Прежде чем действовать, надо понять"}
+                        </div>
                         <div className="block-status-square"></div>
                     </div>
                 </div>
-                
-                <input {...(register(name))}
-                    type={type}
-                    className={inputStatusClasses.join(" ")}
-                    placeholder="напишите статус"
-                    onClick={(event) => handleClickInput(event)}
-                />
+                <div ref={tooltipRef}>
+                    <input {...(register(name))}
+                        type={type}
+                        className={inputStatusClasses.join(" ")}
+                        placeholder="напишите статус"
+                    />
+                </div>
             </div>
 
             <div className="form-container__description">
