@@ -29,7 +29,7 @@ export const FormContainer: React.FC = () => {
 
     const onSubmit: SubmitHandler<IRegistrationFields> = (data) => {
         delete data.checkPassword;
-        console.log(data)
+        console.log( JSON.stringify(data))
         reset()
     }
 
